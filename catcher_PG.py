@@ -52,6 +52,14 @@ def draw_text(text, color, x, y):
 
 # Основной игровой цикл
 running = True
+
+
+def _start_falling():
+    global object_x, object_y
+    object_x = random.randint(0, SCREEN_WIDTH - OBJECT_SIZE)
+    object_y = 0
+
+
 while running:
     # Обработка событий
     for event in pygame.event.get():
@@ -84,15 +92,13 @@ while running:
         # Поймали предмет
         score += 1
         # Перемещаем объект наверх со случайной позицией по X
-        object_x = random.randint(0, SCREEN_WIDTH - OBJECT_SIZE)
-        object_y = 0
+        _start_falling()
 
     # Проверка, упал ли объект (ниже экрана)
     if object_y > SCREEN_HEIGHT:
         misses += 1
-        # Перемещаем объект наверх со случайной позицией
-        object_x = random.randint(0, SCREEN_WIDTH - OBJECT_SIZE)
-        object_y = 0
+        # Перемещаем объект наверх со случайной позицией  по X
+        _start_falling()
 
     # Условие окончания игры
     if misses >= MAX_MISSES:
@@ -121,10 +127,10 @@ pygame.display.flip()
 waiting = True
 while waiting:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
             waiting = False
-        if event.type == pygame.KEYDOWN:
-            waiting = False
+        # if event.type == pygame.KEYDOWN:
+        #     waiting = False
 
 pygame.quit()
 sys.exit()
